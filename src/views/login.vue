@@ -8,8 +8,8 @@
         <span class="iconfont iconnew"></span>
       </div>
       <div class="inputs">
-        <input data-v-744880be placeholder="请输入手机号" class="input" />
-        <input data-v-744880be placeholder="密码" class="input" type="password" />
+        <input placeholder="请输入手机号" class="input" />
+        <input placeholder="密码" class="input" type="password" />
       </div>
       <p class="tips">
         没有账号？
@@ -24,7 +24,7 @@
 export default {}
 </script>
 
-<style lang='less'>
+<style lang='less' scoped>
 .container {
   padding: 20px;
 }
