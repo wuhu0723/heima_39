@@ -15,13 +15,23 @@
         没有账号？
         <a href="#/register" class>去注册</a>
       </p>
-      <div data-v-4bc01e24 class="button">登录按钮</div>
+      <mybutton text='登陆' @click='login' type='primary'></mybutton>
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+import mybutton from '@/components/mybutton.vue'
+export default {
+  components: {
+    mybutton
+  },
+  methods: {
+    login () {
+      console.log('login')
+    }
+  }
+}
 </script>
 
 <style lang='less' scoped>
