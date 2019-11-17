@@ -39,6 +39,7 @@
 <script>
 import mybutton from '@/components/mybutton.vue'
 import myinput from '@/components/myinput.vue'
+import { login } from '@/apis/users.js'
 export default {
   components: {
     mybutton, myinput
@@ -53,7 +54,13 @@ export default {
   },
   methods: {
     login () {
-      console.log(this.userobj)
+      login(this.userobj)
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     // 接收子组件中传递的数据，获取用户输入
     handleruserinput (data) {
