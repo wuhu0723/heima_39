@@ -8,8 +8,24 @@
         <span class="iconfont iconnew"></span>
       </div>
       <div class="inputs">
-        <input placeholder="请输入手机号" class="input" />
-        <input placeholder="密码" class="input" type="password" />
+        <!-- <myinput
+            placeholder='请输入用户名'
+            :value='userobj.username'
+            @input='handleruserinput'
+        ></myinput> -->
+        <myinput
+            placeholder='请输入手机号'
+            v-model='userobj.username'
+            :rules='/^1\d{10}$/'
+            msg_err='手机号输入不正确'
+        ></myinput>
+        <!-- v-model是实现双向数据绑定
+        1.数据赋值给元素：:value='userobj.username'
+        2.元素的值影响源数据:@input='handleruserinput' -->
+        <myinput
+            placeholder='请输入密码'
+            v-model='userobj.password'
+        ></myinput>
       </div>
       <p class="tips">
         没有账号？
@@ -22,13 +38,26 @@
 
 <script>
 import mybutton from '@/components/mybutton.vue'
+import myinput from '@/components/myinput.vue'
 export default {
   components: {
-    mybutton
+    mybutton, myinput
+  },
+  data () {
+    return {
+      userobj: {
+        username: 'jack',
+        password: '123'
+      }
+    }
   },
   methods: {
     login () {
-      console.log('login')
+      console.log(this.userobj)
+    },
+    // 接收子组件中传递的数据，获取用户输入
+    handleruserinput (data) {
+      this.userobj.username = data
     }
   }
 }
