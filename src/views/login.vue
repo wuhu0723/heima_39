@@ -58,9 +58,15 @@ export default {
       login(this.userobj)
         .then(res => {
           console.log(res)
+          if (res.data.message === '登录成功') {
+            this.$router.push({ path: `/personal/${res.data.data.user.id}` })
+          } else {
+            this.$toast.fail(res.data.message)
+          }
         })
         .catch(err => {
           console.log(err)
+          this.$toast.fail('服务器异常，请重试')
         })
     },
     // 接收子组件中传递的数据，获取用户输入

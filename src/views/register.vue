@@ -56,14 +56,15 @@ export default {
   },
   methods: {
     //   实现注册
-    register () {
-      register(this.userobj)
-        .then(res => {
-          console.log(res)
-        })
-        .catch(err => {
-          console.log(err)
-        })
+    async register () {
+      var res = await register(this.userobj)
+      console.log(res)
+      if (res.data.message === '注册成功') {
+        this.$toast.fail('注册成功,请进行登陆')
+        this.$router.push({ name: 'Login' })
+      } else {
+        this.$toast.fail('注册失败')
+      }
     }
   }
 }

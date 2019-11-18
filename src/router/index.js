@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 // 引入路由所映射的组件
 import Login from '@/views/login.vue'
 import Register from '@/views/register.vue'
+import PersonalCenter from '@/views/personalCenter.vue'
 // 3.use
 Vue.use(VueRouter)
 
@@ -20,6 +21,11 @@ var router = new VueRouter({
       name: 'Register',
       path: '/register',
       component: Register
+    },
+    {
+      name: 'PersonalCenter',
+      path: '/personal/:id',
+      component: PersonalCenter
     }
   ]
 })
