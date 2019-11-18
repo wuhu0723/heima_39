@@ -59,6 +59,8 @@ export default {
         .then(res => {
           console.log(res)
           if (res.data.message === '登录成功') {
+            // 将token数据存储到本地
+            localStorage.setItem('heima_39_Authorization', res.data.data.token)
             this.$router.push({ path: `/personal/${res.data.data.user.id}` })
           } else {
             this.$toast.fail(res.data.message)

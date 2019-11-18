@@ -24,9 +24,15 @@
 
 <script>
 import mycell from '@/components/mycell.vue'
+import { getUserInfoById } from '@/apis/users.js'
 export default {
   components: {
     mycell
+  },
+  async mounted () {
+    let id = this.$route.params.id
+    let res = await getUserInfoById(id)
+    console.log(res)
   }
 }
 </script>
