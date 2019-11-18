@@ -30,5 +30,24 @@ var router = new VueRouter({
   ]
 })
 
-// 5.暴露
+// 5. 添加路由导航的前置守卫
+// to:跳转的目的地路由
+// from:从那里来
+// next:继续管道中下一个操作--钩子
+router.beforeEach((to, from, next) => {
+  // 当你访问一些需要授权的页面时，判断是否有登陆的标识，如果有，就继续访问，否则就重定向到登陆页
+  // 所有路由跳转都会经过这个守卫
+  if (to.path.indexOf('/personal/') === 0) {
+    let token = localStorage.getItem('heima_39_Authorization')
+    if (token) {
+      next()
+    } else {
+      next({ name: 'Login' })
+    }
+  } else {
+    next()
+  }
+})
+
+// 6.暴露
 export default router
