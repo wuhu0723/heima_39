@@ -4,6 +4,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 // 引入路由所映射的组件
 import Login from '@/views/login.vue'
+import Register from '@/views/register.vue'
 // 3.use
 Vue.use(VueRouter)
 
@@ -14,6 +15,11 @@ var router = new VueRouter({
       name: 'Login',
       path: '/login',
       component: Login
+    },
+    {
+      name: 'Register',
+      path: '/register',
+      component: Register
     }
   ]
 })
