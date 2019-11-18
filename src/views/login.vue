@@ -24,6 +24,7 @@
         2.元素的值影响源数据:@input='handleruserinput' -->
         <myinput
             placeholder='请输入密码'
+            type='password'
             v-model='userobj.password'
         ></myinput>
       </div>
@@ -47,8 +48,8 @@ export default {
   data () {
     return {
       userobj: {
-        username: 'jack',
-        password: '123'
+        username: '1234567',
+        password: '1234567'
       }
     }
   },

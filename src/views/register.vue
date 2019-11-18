@@ -32,7 +32,7 @@
         有账号？
         <a href="#/login" class>去登陆</a>
       </p>
-      <mybutton text='注册' type='primary'></mybutton>
+      <mybutton text='注册' type='primary' @click='register'></mybutton>
     </div>
   </div>
 </template>
@@ -40,6 +40,7 @@
 <script>
 import mybutton from '@/components/mybutton.vue'
 import myinput from '@/components/myinput.vue'
+import { register } from '@/apis/users.js'
 export default {
   components: {
     mybutton, myinput
@@ -54,6 +55,16 @@ export default {
     }
   },
   methods: {
+    //   实现注册
+    register () {
+      register(this.userobj)
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
   }
 }
 </script>
