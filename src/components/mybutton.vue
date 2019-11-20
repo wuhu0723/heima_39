@@ -13,7 +13,7 @@ export default {
 }
 </script>
 
-<style lang='less'>
+<style lang='less' scoped>
     .btn{
         width: 90%;
         height: 40px;

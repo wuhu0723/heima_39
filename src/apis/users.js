@@ -29,3 +29,12 @@ export const getUserInfoById = (id) => {
     url: `/user/${id}`
   })
 }
+
+// 5. 编辑用户信息，这里注意的是，并不是统一的一起修改所有信息，而只是修改特定的信息
+export const updateUserInfo = (id, data) => {
+  return axios({
+    method: 'post',
+    url: `/user_update/${id}`,
+    data
+  })
+}

@@ -16,7 +16,7 @@ export default {
 }
 </script>
 
-<style lang='less'>
+<style lang='less' scoped>
     .header{
         height: 40px;
         display: flex;
