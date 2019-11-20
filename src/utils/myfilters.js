@@ -1,4 +1,5 @@
 export const timeformat = (data, spe) => {
+  data = data ? new Date(data) : new Date()
   spe = spe || '/'
   var year = data.getFullYear()
   var month = data.getMonth() + 1

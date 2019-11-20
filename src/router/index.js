@@ -6,6 +6,7 @@ import VueRouter from 'vue-router'
 import Login from '@/views/login.vue'
 import Register from '@/views/register.vue'
 import PersonalCenter from '@/views/personalCenter.vue'
+import EditPersonal from '@/views/editPersonal.vue'
 // 3.use
 Vue.use(VueRouter)
 
@@ -26,6 +27,11 @@ var router = new VueRouter({
       name: 'PersonalCenter',
       path: '/personal/:id',
       component: PersonalCenter
+    },
+    {
+      name: 'EditPersonal',
+      path: '/editPersonal/:id',
+      component: EditPersonal
     }
   ]
 })
