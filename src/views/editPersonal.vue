@@ -35,15 +35,24 @@
         @confirm='updatepass'
         :before-close='beforeClose'
         >
-        <!-- <van-cell-group> -->
+        <van-cell-group>
             <van-field v-model="password" placeholder="请输入原密码" label="原密码"
           required
           clearable/>
             <van-field placeholder="请输入新密码" label="新密码" ref='userpwd'
           required/>
-        <!-- </van-cell-group> -->
+        </van-cell-group>
         </van-dialog>
-      <mycell title="性别" :desc="userobj.gender===1?'男':'女'"></mycell>
+      <mycell title="性别" :desc="userobj.gender===1?'男':'女'" @click='gendershow=true'></mycell>
+      <van-dialog
+        v-model="gendershow"
+        title="修改性别"
+        show-cancel-button
+        :closeOnClickOverlay='true'
+        @confirm='updategender'
+      >
+      <van-picker :columns="['女','男']" @change="onChange" :default-index="userobj.gender" />
+      </van-dialog>
     </div>
   </div>
 </template>
@@ -67,14 +76,31 @@ export default {
       nickshow: false,
       // 修改密码对话框是否显示
       passshow: false,
+      gendershow: false,
       nickname: '',
       password: '',
       id: '',
-      userobj: {}
+      userobj: {},
+      genderindex: ''
     }
   },
   methods: {
-    //   关闭弹窗前触发
+    //   picker选项变化时触发
+    async onChange (picker, value, index) {
+      console.log(`当前值：${value}, 当前索引：${index}`)
+      // 因为gender在数据库中存储就是0和1，类似于索引
+      // 为了之后能够使用到这个索引，将索引存储到data中
+      this.genderindex = index
+    },
+    //   修改性别
+    async updategender () {
+      let res = await updateUserInfo(this.id, { gender: this.genderindex })
+      if (res.data.message === '修改成功') {
+        this.$toast.success('修改成功')
+        this.userobj.gender = this.genderindex
+      }
+    },
+    // 关闭弹窗前触发
     // action:当前操作的类型：cancel  comfirm
     // done:关闭时所执行的操作：done():关闭 done(false):不关闭
     beforeClose (action, done) {
