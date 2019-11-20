@@ -1,5 +1,5 @@
 <template>
-    <div class="cell">
+    <div class="cell" @click='handlerclick'>
         <span>{{title}}</span>
         <div>
             <span>{{type==='password'?'*****':desc}}</span>
@@ -10,7 +10,12 @@
 
 <script>
 export default {
-  props: ['title', 'desc', 'type']
+  props: ['title', 'desc', 'type'],
+  methods: {
+    handlerclick (event) {
+      this.$emit('click', event)
+    }
+  }
 }
 </script>
 
