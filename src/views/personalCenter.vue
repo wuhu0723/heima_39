@@ -52,7 +52,7 @@ export default {
         // 拼接基准路径
         this.currentUser.head_img = localStorage.getItem('heima_39_baseurl') + this.currentUser.head_img
       } else {
-        this.currentUser.head_img = './avatar.jpg'
+        this.currentUser.head_img = localStorage.getItem('heima_39_baseurl') + '/uploads/image/default.png'
       }
     }
   }

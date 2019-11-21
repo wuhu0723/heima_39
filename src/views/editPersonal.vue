@@ -181,7 +181,7 @@ export default {
       this.userobj = res.data.data
       this.userobj.head_img = this.userobj.head_img
         ? localStorage.getItem('heima_39_baseurl') + this.userobj.head_img
-        : './avatar.jpg'
+        : localStorage.getItem('heima_39_baseurl') + '/uploads/image/default.png'
     }
   }
 }
@@ -202,6 +202,7 @@ export default {
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
+      object-fit: cover;
     }
     .van-uploader {
       width: 70px;

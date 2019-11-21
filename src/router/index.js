@@ -7,12 +7,24 @@ import Login from '@/views/login.vue'
 import Register from '@/views/register.vue'
 import PersonalCenter from '@/views/personalCenter.vue'
 import EditPersonal from '@/views/editPersonal.vue'
+import Index from '@/views/index.vue'
 // 3.use
 Vue.use(VueRouter)
 
 // 4.创建路由对象
 var router = new VueRouter({
   routes: [
+    {
+      name: 'default',
+      path: '/',
+      // 默认打开index首页，为了提高用户体验
+      redirect: { name: 'Index' }
+    },
+    {
+      name: 'Index',
+      path: '/index',
+      component: Index
+    },
     {
       name: 'Login',
       path: '/login',

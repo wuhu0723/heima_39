@@ -61,6 +61,8 @@ export default {
           if (res.data.message === '登录成功') {
             // 将token数据存储到本地
             localStorage.setItem('heima_39_Authorization', res.data.data.token)
+            // 将id号存储到本地
+            localStorage.setItem('heima_39_id', res.data.data.user.id)
             this.$router.push({ path: `/personal/${res.data.data.user.id}` })
           } else {
             this.$toast.fail(res.data.message)
