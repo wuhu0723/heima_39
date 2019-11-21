@@ -23,7 +23,6 @@
         >
             <articleBlock v-for='(sv,si) in value.articleList' :key='si' :post='sv'></articleBlock>
         </van-list>
-
         </van-tab>
       </van-tabs>
   </div>
