@@ -17,7 +17,7 @@
         </div>
         <div class="articleContent" v-html='article.content'></div>
         <div class="opt">
-            <van-button icon="good-job-o" type="primary" plain >{{article.like_length}}</van-button>
+            <van-button icon="good-job-o" type="primary" plain @click='likethisarticle' :class="{likeactive:article.has_like}">{{article.like_length}}</van-button>
             <van-button icon="chat" type="primary" plain >微信</van-button>
         </div>
     </div>
@@ -43,7 +43,7 @@
 <script>
 import myheader from '@/components/myheader.vue'
 import commentFooter from '@/components/commentFooter.vue'
-import { getArticleById } from '@/apis/article.js'
+import { getArticleById, likeArticle } from '@/apis/article.js'
 import { focusUser, unfocusUser } from '@/apis/users.js'
 export default {
   data () {
@@ -67,6 +67,20 @@ export default {
     this.focuText = this.isActive ? '已关注' : '关注'
   },
   methods: {
+    // 文章点赞
+    async likethisarticle () {
+      let res = await likeArticle(this.article.id)
+      console.log(res)
+      if (res.data.message === '点赞成功') {
+        this.article.like_length++
+        // 由于在绑定样式的时候,我们是通过article成员的has_like属性进行样式的动态结绑定,所以在操作之后,为了让样式能够有一个相应的变化,应该去重置article的has_like属性的值
+        this.article.has_like = true
+      } else {
+        --this.article.like_length
+        this.article.has_like = false
+      }
+    },
+    // 关注和取消关注
     async userFollow () {
       let res
       // 判断当前到底是关注还是取消关注
@@ -90,6 +104,10 @@ export default {
 </script>
 
 <style lang='less' scoped>
+.likeactive{
+  color:red!important;
+  border-color:red!important;
+}
 // 0 0 2 0
 .header {
     line-height: 40px;
