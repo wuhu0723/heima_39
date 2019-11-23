@@ -38,3 +38,16 @@ export const updateUserInfo = (id, data) => {
     data
   })
 }
+
+// 6. 关注文章发布者
+export const focusUser = (id) => {
+  return axios({
+    url: `/user_follows/${id}`
+  })
+}
+// 7. 关取消注文章发布者
+export const unfocusUser = (id) => {
+  return axios({
+    url: `/user_unfollow/${id}`
+  })
+}

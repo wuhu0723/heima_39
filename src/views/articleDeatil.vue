@@ -1,18 +1,18 @@
 <template>
   <div class="articleDeatil">
     <myheader>
-      <div slot="left">
+      <div slot="left" @click='$router.back()'>
         <van-icon name="arrow-left" />
         <span class="iconfont iconnew"></span>
       </div>
       <div slot="right">
-        <div class="btn">关注</div>
+        <div class="btn" @click='userFollow' :class="{active:isActive}">{{focuText}}</div>
       </div>
     </myheader>
-    <div class="content">
-        <div class="title">{{article.title}}</div>
+    <div class="content" v-if='article.type === 1'>
+        <div class="title">{{article.title || ''}}</div>
         <div class="info">
-            <span>{{article.user.nickname}}</span>
+            <span>{{article.user && article.user.nickname}}</span>
             <span>2019-11-23</span>
         </div>
         <div class="articleContent" v-html='article.content'></div>
@@ -21,7 +21,7 @@
             <van-button icon="chat" type="primary" plain >微信</van-button>
         </div>
     </div>
-    <div class="comment">
+    <div class="commentList">
       <h2>精彩跟帖</h2>
       <div class="item">
         <div class="head">
@@ -36,27 +36,55 @@
       </div>
       <div class="more">更多跟帖</div>
     </div>
-    <div class="foot"></div>
+    <commentFooter></commentFooter>
   </div>
 </template>
 
 <script>
 import myheader from '@/components/myheader.vue'
+import commentFooter from '@/components/commentFooter.vue'
 import { getArticleById } from '@/apis/article.js'
+import { focusUser, unfocusUser } from '@/apis/users.js'
 export default {
   data () {
     return {
-      article: {}
+      article: {
+
+      },
+      isActive: '',
+      focuText: ''
     }
   },
   components: {
-    myheader
+    myheader, commentFooter
   },
   async mounted () {
     let id = this.$route.params.id
     let res = await getArticleById(id)
     console.log(res)
     this.article = res.data.data
+    this.isActive = this.article.has_follow
+    this.focuText = this.isActive ? '已关注' : '关注'
+  },
+  methods: {
+    async userFollow () {
+      let res
+      // 判断当前到底是关注还是取消关注
+      if (this.isActive) { // true:已关注
+        res = await unfocusUser(this.article.user.id)
+        if (res.data.message === '取消关注成功') {
+          this.isActive = false
+          this.focuText = '关注'
+        }
+      } else { // 还没有关注
+        res = await focusUser(this.article.user.id)
+        if (res.data.message === '已关注' || res.data.message === '关注成功') {
+          this.isActive = true
+          this.focuText = '已关注'
+        }
+      }
+      this.$toast.success(res.data.message)
+    }
   }
 }
 </script>
@@ -65,6 +93,9 @@ export default {
 // 0 0 2 0
 .header {
     line-height: 40px;
+    /deep/.left{
+      vertical-align: middle;
+    }
   // /deep/：可以在父组件中修改子组件的样式：让父组件中的样式影响子组件
   /deep/.leftspan {
     width: 100px !important;
@@ -79,6 +110,11 @@ export default {
       border:1px solid #ccc;
       line-height: 20px;
       text-align: center;
+      font-size: 13px;
+      &.active {
+        background-color: #f00;
+        color: #fff;
+      }
   }
 }
 .content{
@@ -111,9 +147,9 @@ export default {
         justify-content: space-around;
     }
 }
-.comment {
+.commentList {
     border-top: 5px solid #ddd;
-    padding: 0 15px;
+    padding: 0 15px 50px;
     box-sizing: border-box;
     > h2 {
       line-height: 50px;

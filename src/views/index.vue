@@ -100,7 +100,7 @@ export default {
       this.init(() => {
         setTimeout(() => {
           this.cateList[this.active].isLoading = false
-          // 将下拉刷新的结束标识进行重置
+          // 将下拉刷新的结束标识进行重置,如果没有重置,那么有可能就不能再上拉加载更多数据了
           this.cateList[this.active].finished = false
         }, 1000)
       })
