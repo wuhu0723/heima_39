@@ -21,7 +21,11 @@
         @load="onLoad"
         loading-text='正在玩命加载.....'
         >
-            <articleBlock v-for='(sv,si) in value.articleList' :key='si' :post='sv'></articleBlock>
+        <!-- 下拉刷新 -->
+        <van-pull-refresh v-model="value.isLoading" @refresh="onRefresh">
+          <articleBlock v-for='(sv,si) in value.articleList' :key='si' :post='sv' @click='$router.push({path:`/articleDeatil/${sv.id}`})'></articleBlock>
+        </van-pull-refresh>
+
         </van-list>
         </van-tab>
       </van-tabs>
@@ -57,7 +61,7 @@ export default {
       //   // 将数据存储到当前栏目的数组中
       //   this.cateList[this.active].articleList = res.data.data
       if (this.cateList[this.active].articleList.length === 0) {
-        this.init(id)
+        this.init()
       }
     }
   },
@@ -72,21 +76,37 @@ export default {
       // map会执行回调函数，并将回调函数的结果存储到数组，最终将数组返回
       this.cateList = this.cateList.map(value => {
         return {
-          ...value,
+          ...value, // id name is_top
           articleList: [], // 当前栏目中的文章列表数据
           pageIndex: 1, // 当前栏目当前数据页码
           pageSize: 5, // 每页显示的记录数
           loading: false, // 上拉加载更多数据的加载状态，如果为true,则说明正在加载数据
-          finished: false // 上拉加载更多 数据的完成状态，finished为true说明没有更多数据了
+          finished: false, // 上拉加载更多 数据的完成状态，finished为true说明没有更多数据了
+          isLoading: false // 下拉刷新的标识
         }
       })
       console.log(this.cateList)
-      //   获取当前默认栏目的文章数据
-      this.init(this.cateList[this.active].id)
+      // 获取当前默认栏目的文章数据
+      this.init()
     }
   },
   methods: {
-    //   上拉加载更多数据
+    // 下拉刷新
+    onRefresh () {
+      // 重新第一页加载数据
+      this.cateList[this.active].pageIndex = 1
+      // this.cateList[this.active].articleList = []
+      this.cateList[this.active].articleList.length = 0
+      this.init(() => {
+        setTimeout(() => {
+          this.cateList[this.active].isLoading = false
+          // 将下拉刷新的结束标识进行重置
+          this.cateList[this.active].finished = false
+        }, 1000)
+      })
+      // 加载成功后将isLoading重置为false
+    },
+    // 上拉加载更多数据
     onLoad () {
       console.log(111)
       // 发起异步请求，获取下一页数据
@@ -95,16 +115,27 @@ export default {
         this.init()
       }, 2000)
     },
-    //   通过id号来获取指定栏目的文章数据
-    async init () {
-      let res = await getArticleList({ pageIndex: this.cateList[this.active].pageIndex, pageSize: this.cateList[this.active].pageSize, category: this.cateList[this.active].id })
+    // 通过id号来获取指定栏目的文章数据
+    async init (callback) {
+      // localhost:3000/post?pageIndex=1&pageSize=2&category=8
+      let res = await getArticleList({
+        pageIndex: this.cateList[this.active].pageIndex,
+        pageSize: this.cateList[this.active].pageSize,
+        category: this.cateList[this.active].id })
       console.log(res)
-      // 将数据存储到当前栏目的数组中
+      // 与：只有两个都为真才为真
+      // 判断是否有callback,有callback才会执行后面的函数调用
+      callback && callback()
+      // if (callback) {
+      //   callback()
+      // }
+      // 将数据存储到当前栏目的数组中:上拉加载更多数据，需要将数据进行追加而不是覆盖
       this.cateList[this.active].articleList.push(...res.data.data)
-      // 设置本次数据加载结束
+      // 设置本次数据加载结束，false将隐藏  正在加载  的提示
       this.cateList[this.active].loading = false
       // 判断数据是否已经完全加载完毕
       if (res.data.data.length < this.cateList[this.active].pageSize) {
+        // 不设置，会造成始终可以上拉，但是却无法获取到数据
         this.cateList[this.active].finished = true
       }
     },

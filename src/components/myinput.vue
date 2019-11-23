@@ -53,7 +53,7 @@ export default {
         if (!this.rules.test(event.target.value)) {
           this.statu = 'error'
           // 给出提示
-          this.$toast.fail(this.msg_err)
+          this.$toast(this.msg_err)
         }
       }
     }

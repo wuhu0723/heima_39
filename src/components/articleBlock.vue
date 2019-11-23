@@ -1,5 +1,5 @@
 <template>
-  <div class="article" v-if="post.type===1 && post.cover.length <= 2">
+  <div class="article" v-if="post.type===1 && post.cover.length <= 2" @click='handlerclick'>
     <div class="left">
       <div class="title">{{post.title}}</div>
       <p class="p_desc">
@@ -11,7 +11,7 @@
       <img :src="post.cover[0].url" alt />
     </div>
   </div>
-  <div class="article_video" v-else-if="post.type===2">
+  <div class="article_video" v-else-if="post.type===2" @click='handlerclick'>
     <div class="title">{{post.title}}</div>
     <div class="img">
         <img :src="post.cover[0].url" alt />
@@ -22,7 +22,7 @@
       <span>{{post.comment_length}}跟帖</span>
     </p>
   </div>
-  <div class="article_video" v-else-if="post.type===1 && post.cover.length >= 3">
+  <div class="article_video" v-else-if="post.type===1 && post.cover.length >= 3" @click='handlerclick'>
     <div class="title">{{post.title}}</div>
     <div class="imgs">
         <img :src="value.url" alt  v-for='(value,index) in post.cover' :key='index'/>
@@ -37,7 +37,12 @@
 <script>
 export default {
   // 当前的文章数据
-  props: ['post']
+  props: ['post'],
+  methods: {
+    handlerclick (event) {
+      this.$emit('click', event)
+    }
+  }
 }
 </script>
 
