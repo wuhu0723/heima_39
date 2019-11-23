@@ -16,7 +16,7 @@
 
     <mycell title='我的关注' desc='关注的用户' @click="$router.push({name: 'Myfocus'})"></mycell>
     <mycell title='我的跟帖' desc='跟帖/回复'></mycell>
-    <mycell title='我的收藏' desc='文章/视频'></mycell>
+    <mycell title='我的收藏' desc='文章/视频' @click="$router.push({name: 'Mystars'})"></mycell>
     <mycell title='设置'></mycell>
   </div>
 </template>

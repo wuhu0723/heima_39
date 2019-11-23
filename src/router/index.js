@@ -10,6 +10,7 @@ import EditPersonal from '@/views/editPersonal.vue'
 import Index from '@/views/index.vue'
 import ArticleDeatil from '@/views/articleDeatil.vue'
 import Myfocus from '@/views/myfocus.vue'
+import Mystars from '@/views/mystars.vue'
 // 3.use
 Vue.use(VueRouter)
 
@@ -56,6 +57,11 @@ var router = new VueRouter({
       name: 'Myfocus',
       path: '/myfocus',
       component: Myfocus
+    },
+    {
+      name: 'Mystars',
+      path: '/mystars',
+      component: Mystars
     }
   ]
 })

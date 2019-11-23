@@ -58,3 +58,10 @@ export const getUserFocus = () => {
     url: `/user_follows`
   })
 }
+
+// 9.获取用户收藏列表
+export const getUserStars = () => {
+  return axios({
+    url: `/user_star`
+  })
+}

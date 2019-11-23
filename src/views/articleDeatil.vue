@@ -36,7 +36,7 @@
       </div>
       <div class="more">更多跟帖</div>
     </div>
-    <commentFooter></commentFooter>
+    <commentFooter :post='article'></commentFooter>
   </div>
 </template>
 

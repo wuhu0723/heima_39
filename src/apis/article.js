@@ -22,3 +22,10 @@ export const likeArticle = (id) => {
     url: `/post_like/${id}`
   })
 }
+
+// 5.收藏文章
+export const startThisArticle = (id) => {
+  return axios({
+    url: `/post_star/${id}`
+  })
+}
