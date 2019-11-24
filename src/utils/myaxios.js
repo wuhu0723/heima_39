@@ -25,9 +25,9 @@ axios.interceptors.request.use(function (config) {
 // response:响应报文
 axios.interceptors.response.use(function (response) {
   // 对响应数据做点什么
-//   console.log(response)
+  // console.log(response)
   let msg = response.data.message
-  if (msg === '用户信息验证失败') {
+  if (msg === '用户信息验证失败!' || msg === '用户信息验证失败') {
     // 说明token没有，则应该重新登陆
     window.location = '#/login'
   }

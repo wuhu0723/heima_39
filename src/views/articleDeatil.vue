@@ -1,7 +1,7 @@
 <template>
   <div class="articleDeatil">
     <myheader>
-      <div slot="left" @click='$router.back()'>
+      <div slot="left" @click='$router.back()' class="lefth">
         <van-icon name="arrow-left" />
         <span class="iconfont iconnew"></span>
       </div>
@@ -23,16 +23,16 @@
     </div>
     <div class="commentList">
       <h2>精彩跟帖</h2>
-      <div class="item">
+      <div class="item" v-for='value in articleComments' :key='value.id'>
         <div class="head">
-          <img src="" alt />
+          <img :src="value.user.head_img" alt />
           <div>
-            <p>火星网友</p>
+            <p>{{value.user.nickname}}</p>
             <span>2小时前</span>
           </div>
           <span>回复</span>
         </div>
-        <div class="text">文章说得很有道理</div>
+        <div class="text">{{value.content}}</div>
       </div>
       <div class="more">更多跟帖</div>
     </div>
@@ -43,16 +43,16 @@
 <script>
 import myheader from '@/components/myheader.vue'
 import commentFooter from '@/components/commentFooter.vue'
-import { getArticleById, likeArticle } from '@/apis/article.js'
+import { getArticleById, likeArticle, getArticleComments } from '@/apis/article.js'
 import { focusUser, unfocusUser } from '@/apis/users.js'
 export default {
   data () {
     return {
       article: {
-
       },
       isActive: '',
-      focuText: ''
+      focuText: '',
+      articleComments: []
     }
   },
   components: {
@@ -65,6 +65,13 @@ export default {
     this.article = res.data.data
     this.isActive = this.article.has_follow
     this.focuText = this.isActive ? '已关注' : '关注'
+    // 再次请求获取当前文章的评论数据
+    let res2 = await getArticleComments(id)
+    console.log(res2)
+    this.articleComments = res2.data.data
+    this.articleComments.forEach(value => {
+      value.user.head_img = value.user.head_img ? localStorage.getItem('heima_39_baseurl') + value.user.head_img : localStorage.getItem('heima_39_baseurl') + '/uploads/image/default.png'
+    })
   },
   methods: {
     // 文章点赞
@@ -113,6 +120,10 @@ export default {
     line-height: 40px;
     /deep/.left{
       vertical-align: middle;
+    }
+    .lefth{
+      display: flex;
+      align-items: center;
     }
   // /deep/：可以在父组件中修改子组件的样式：让父组件中的样式影响子组件
   /deep/.leftspan {
