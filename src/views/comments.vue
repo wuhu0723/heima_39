@@ -19,6 +19,7 @@
         <div class="text">{{value.content}}</div>
       </div>
     </div>
+    <commentFooter :post='article'></commentFooter>
   </div>
 </template>
 
@@ -26,12 +27,14 @@
 import { getArticleComments } from '@/apis/article.js'
 import myheader from '@/components/myheader.vue'
 import commentItem from '@/components/commentItem.vue'
+import commentFooter from '@/components/commentFooter.vue'
 export default {
   components: {
-    myheader, commentItem
+    myheader, commentItem, commentFooter
   },
   data () {
     return {
+      article: {},
       articleComments: []
     }
   },
