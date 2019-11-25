@@ -1,34 +1,77 @@
 <template>
   <div class="comment">
+    <!-- 询问结构块，它的文本框更多是的显示提示 -->
     <div class="addcomment" v-show='!isFocus'>
       <input type="text" placeholder="写跟帖" @click='isFocus=!isFocus'/>
       <span class="comment" @click="$router.push({path: `/comments/${post.id}`})">
         <i class="iconfont iconpinglun-"></i>
-        <em>100</em>
+        <em>{{post.comment_length}}</em>
       </span>
       <i class="iconfont iconshoucang" @click='starArticle' :class="{active:post.has_star}"></i>
       <i class="iconfont iconfenxiang"></i>
     </div>
+    <!-- 文本域：用于输入评论内容 -->
     <div class="inputcomment" v-show='isFocus'>
-        <textarea  ref='commtext' rows="5"></textarea>
+        <textarea  ref='commtext' rows="5" :placeholder="placeholder"></textarea>
         <div>
-            <span>发送</span>
-            <span @click='isFocus=!isFocus'>取消</span>
+            <span @click='sendComment'>发送</span>
+            <span @click='cancelcomment'>取消</span>
         </div>
     </div>
   </div>
 </template>
 
 <script>
-import { startThisArticle } from '@/apis/article.js'
+import { startThisArticle, publishComment } from '@/apis/article.js'
 export default {
-  props: ['post'],
+  props: ['post', 'replayobj'],
   data () {
     return {
-      isFocus: false
+      isFocus: false,
+      placeholder: ''
+    }
+  },
+  // 监听replayobj的值的变化，如果值不为null,说明用户单击了回复，传入了一个对象
+  watch: {
+    replayobj () {
+      console.log(this.replayobj)
+      if (this.replayobj !== null) {
+        this.isFocus = true
+        this.placeholder = '@' + this.replayobj.user.nickname
+        setTimeout(() => {
+          this.$refs.commtext.focus()
+        }, 0)
+      }
     }
   },
   methods: {
+    // 取消本次评论
+    cancelcomment () {
+      this.isFocus = false
+      this.$refs.commtext.value = ''
+      // 告诉父组件重置replayobj
+      this.$emit('resetreplayobj')
+    },
+    // 发表评论
+    async sendComment () {
+      // console.log(this.$refs.commtext.value)
+      let data = {
+        content: this.$refs.commtext.value
+      }
+      // 如果是单击回复，那么就需要获取到父组件评论中的id
+      if (this.replayobj) {
+        data.parent_id = this.replayobj.id
+      }
+      // data.parent_id = 父组件value.id
+      let res = await publishComment(this.post.id, data)
+      console.log(res)
+      if (res.data.message === '评论发布成功') {
+        // 告诉父组件我发表了评论且成功了，父组件需要进行数据的刷新
+        this.$emit('refreshComment')
+        this.$refs.commtext.value = ''
+        this.isFocus = false
+      }
+    },
     // 文章点赞
     async starArticle () {
       let res = await startThisArticle(this.post.id)

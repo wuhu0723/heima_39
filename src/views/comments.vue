@@ -11,20 +11,20 @@
             <p>{{value.user.nickname}}</p>
             <span>2小时前</span>
           </div>
-          <span>回复</span>
+          <span @click='replayComment(value)'>回复</span>
         </div>
         <!-- 使用v-if判断是否需要创建评论块结构，标准就是parent是否是一个非空对象 -->
         <!-- 如果是非空对象，就创建评论块，并且传入parent数据 -->
-        <commentItem v-if='value.parent' :data='value.parent'></commentItem>
+        <commentItem v-if='value.parent' :data='value.parent' @replayComment='replayComment'></commentItem>
         <div class="text">{{value.content}}</div>
       </div>
     </div>
-    <commentFooter :post='article'></commentFooter>
+    <commentFooter :post='article' @refreshComment="init();++article.comment_length" :replayobj='obj' @resetreplayobj='obj = null'></commentFooter>
   </div>
 </template>
 
 <script>
-import { getArticleComments } from '@/apis/article.js'
+import { getArticleComments, getArticleById } from '@/apis/article.js'
 import myheader from '@/components/myheader.vue'
 import commentItem from '@/components/commentItem.vue'
 import commentFooter from '@/components/commentFooter.vue'
@@ -34,18 +34,35 @@ export default {
   },
   data () {
     return {
+      id: '',
       article: {},
-      articleComments: []
+      articleComments: [],
+      obj: {} // 这就是当前定义的变量
     }
   },
   async mounted () {
-    let id = this.$route.params.id
-    let res = await getArticleComments(id)
-    console.log(res)
-    this.articleComments = res.data.data
-    this.articleComments.forEach(value => {
-      value.user.head_img = value.user.head_img ? localStorage.getItem('heima_39_baseurl') + value.user.head_img : localStorage.getItem('heima_39_baseurl') + '/uploads/image/default.png'
-    })
+    this.id = this.$route.params.id
+    this.init()
+    let res2 = await getArticleById(this.id)
+    console.log(res2)
+    this.article = res2.data.data
+  },
+  methods: {
+    // 回复评论
+    replayComment (value) {
+      this.obj = value
+    },
+    // 数据初始化
+    async init () {
+      let res = await getArticleComments(this.id)
+      console.log(res)
+      this.articleComments = res.data.data
+      this.articleComments.forEach(value => {
+        value.user.head_img = value.user.head_img ? localStorage.getItem('heima_39_baseurl') + value.user.head_img : localStorage.getItem('heima_39_baseurl') + '/uploads/image/default.png'
+      })
+      // 移动到屏幕的最顶部
+      window.scrollTo(0, 0)
+    }
   }
 }
 </script>

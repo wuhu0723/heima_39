@@ -9,13 +9,24 @@
         <div class="btn" @click='userFollow' :class="{active:isActive}">{{focuText}}</div>
       </div>
     </myheader>
-    <div class="content" v-if='article.type === 1'>
+    <div class="content">
         <div class="title">{{article.title || ''}}</div>
         <div class="info">
             <span>{{article.user && article.user.nickname}}</span>
             <span>2019-11-23</span>
         </div>
-        <div class="articleContent" v-html='article.content'></div>
+        <div class="articleContent" v-html='article.content'  v-if='article.type === 1'></div>
+        <div class="video" v-if='article.type === 2'>
+          <!-- src:当前视频资源的路径
+          controls:显示控制面板,默认不会显示
+          width:宽度
+          height: 高度
+          autoplay:自动播放
+          loop:循环播放
+          poster:设置封面，设置视频第一帧的画面，它应该设置为一张图片 -->
+          <!-- <video :src="article.content" controls autoplay loop :poster="article.cover[0].url"></video> -->
+          <video :src="article.content" controls :poster="article.cover[0].url"></video>
+        </div>
         <div class="opt">
             <van-button icon="good-job-o" type="primary" plain @click='likethisarticle' :class="{likeactive:article.has_like}">{{article.like_length}}</van-button>
             <van-button icon="chat" type="primary" plain >微信</van-button>
@@ -170,6 +181,12 @@ export default {
             width: 100%;
             display: block;
         }
+    }
+    .video{
+      width: 100%;
+      > video{
+        width: 100%;
+      }
     }
     .opt{
         display: flex;

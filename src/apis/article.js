@@ -36,3 +36,28 @@ export const getArticleComments = (id) => {
     url: `/post_comment/${id}`
   })
 }
+
+// 7.发表评论
+export const publishComment = (id, data) => {
+  return axios({
+    method: 'post',
+    url: `/post_comment/${id}`,
+    data
+  })
+}
+
+// 搜索推荐
+export const hotSearch = (keyword) => {
+  return axios({
+    url: '/post_search_recommend',
+    params: { keyword }
+  })
+}
+
+// 搜索文章
+export const serachArticle = (keyword) => {
+  return axios({
+    url: `/post_search`,
+    params: { keyword }
+  })
+}
